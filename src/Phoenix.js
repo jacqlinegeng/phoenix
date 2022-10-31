@@ -23,6 +23,9 @@ export default function PhoenixApp() {
   // set date picker
   const [value, setValue] = React.useState(dayjs("2022-10-31T12:00:00"));
   const [walletAddress, setWalletAddress] = useState(null);
+  const [inputValue, setInputValue] = useState('');
+  const [unsignedVC, setUnsignedVC] = useState('');
+
 
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -32,18 +35,20 @@ export default function PhoenixApp() {
   const sections = document.querySelectorAll(".card-section");
   const card = document.querySelector(".card");
 
-  const handleButtonClick = (e) => {
-    const targetSection = e.target.getAttribute("data-section");
-    const section = document.querySelector(targetSection);
-    targetSection !== "#about"
-      ? card.classList.add("is-active")
-      : card.classList.remove("is-active");
-    card.setAttribute("data-state", targetSection);
-    sections.forEach((s) => s.classList.remove("is-active"));
-    buttons.forEach((b) => b.classList.remove("is-active"));
-    e.target.classList.add("is-active");
-    section.classList.add("is-active");
-  };
+  // const handleButtonClick = (e) => {
+  //   const targetSection = e.target.getAttribute("data-section");
+    
+  //   // const section = document.querySelector(targetSection);
+    
+  //   // targetSection !== "#about"
+  //   //   ? card.classList.add("is-active")
+  //   //   : card.classList.remove("is-active");
+  //   // card.setAttribute("data-state", targetSection);
+  //   // sections.forEach((s) => s.classList.remove("is-active"));
+  //   // buttons.forEach((b) => b.classList.remove("is-active"));
+  //   // e.target.classList.add("is-active");
+  //   // section.classList.add("is-active");
+  // };
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -71,6 +76,24 @@ export default function PhoenixApp() {
     }
   };
 
+
+
+  const renderConnectedContainer = () => (
+    <div className="connected-container">
+      <button className="cta-button disconnect-wallet-button" onClick={disconnectWallet}>
+        SIGN OUT
+      </button>
+      <form
+        className="form"
+        onSubmit={(event) => {
+          event.preventDefault();
+        }}
+      >
+      </form>
+    </div>
+  );
+
+
   const connectWallet = async () => {
     const { solana } = window;
   
@@ -78,8 +101,21 @@ export default function PhoenixApp() {
       const response = await solana.connect();
       console.log('Connected with Public Key:', response.publicKey.toString());
       setWalletAddress(response.publicKey.toString());
+      // console.log('walle: ',walletAddress);
     }
   };
+
+  const disconnectWallet = () => {
+    console.log("Wallet Disconnected");
+    setWalletAddress(null);
+  };
+
+
+  const onInputChange = (event) => {
+    const { value } = event.target;
+    setInputValue(value);
+  };
+
 
   const renderNotConnectedContainer = () => (
     <div className="container">
@@ -92,9 +128,9 @@ export default function PhoenixApp() {
     </div>
   );
 
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", handleButtonClick);
-  });
+  // buttons.forEach((btn) => {
+  //   btn.addEventListener("click", handleButtonClick);
+  // });
 
   // const [walletAddress, setWalletAddress] = useState(null);
   // const [inputValue, setInputValue] = useState("");
@@ -130,11 +166,15 @@ export default function PhoenixApp() {
             },
           }}
         />
-        <div className="header-container">{!walletAddress && renderNotConnectedContainer()}</div>
-      </div>
-
+        <div className="header-container">
+          {!walletAddress && renderNotConnectedContainer()}
+          {walletAddress && renderConnectedContainer()}
+          </div>
+        
       <div className="newform">
-        <form className="form" method="post" action="/post">
+        <form className="form" method="post" action="/post" onSubmit={(event) => {
+          event.preventDefault();
+        }}>
           <div class="card" data-state="#about">
             <div class="card-header">
               <img
@@ -155,6 +195,8 @@ export default function PhoenixApp() {
                     class="legalname"
                     type="text"
                     placeholder="First Name, Last Name"
+                    value={inputValue}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div class="card-subtitle">Address</div>
@@ -163,18 +205,23 @@ export default function PhoenixApp() {
                     class="address"
                     type="text"
                     placeholder="Unit, Street Name, City, State, Postal Code"
+                    value={inputValue}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div class="card-subtitle">Age</div>
                 <div class="input-box">
-                  <input class="age" type="text" placeholder="i.e. 24" />
+                  <input class="age" type="text" placeholder="i.e. 24" value={inputValue}
+                    onChange={onInputChange}/>
                 </div>
-                <div class="card-subtitle">Description of Perpetration</div>
+                <div class="card-subtitle">Description of Incident</div>
                 <div class="input-box">
                   <input
                     class="description"
                     type="text"
-                    placeholder="Alcoholic mother abused me"
+                    placeholder="Provide details of incident"
+                    value={inputValue}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div class="card-subtitle">Legal Name of Perpetrator</div>
@@ -183,6 +230,8 @@ export default function PhoenixApp() {
                     class="perpetrator-name"
                     type="text"
                     placeholder="First Name, Last Name"
+                    value={inputValue}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div class="card-subtitle">Relationship with Perpetrator</div>
@@ -191,6 +240,8 @@ export default function PhoenixApp() {
                     class="relationship"
                     type="text"
                     placeholder="i.e. Mother"
+                    value={inputValue}
+                    onChange={onInputChange}
                   />
                 </div>
                 <div class="card-subtitle">Date of Incident</div>
@@ -223,13 +274,14 @@ export default function PhoenixApp() {
             </div>
 
             <div class="card-buttons">
-              <button className="submit-button" onClick="">
+              <button className="submit-button" onClick={() => setUnsignedVC("hello world")}>
                 Submit Record
                 {/* {shortenAddress(walletAddress)} */}
               </button>
             </div>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );
