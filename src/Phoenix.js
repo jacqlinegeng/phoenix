@@ -77,11 +77,17 @@ export default function PhoenixApp() {
   };
 
 
+  const shortenAddress = (address) => {
+    if (!address) return "";
+    return address.substring(0, 4) + "....." + address.substring(40);
+  };
 
   const renderConnectedContainer = () => (
     <div className="connected-container">
       <button className="cta-button disconnect-wallet-button" onClick={disconnectWallet}>
-        SIGN OUT
+        <span className="sign-out">SIGN OUT </span>
+        <span>{shortenAddress(walletAddress)}</span>
+        
       </button>
       <form
         className="form"
@@ -101,7 +107,6 @@ export default function PhoenixApp() {
       const response = await solana.connect();
       console.log('Connected with Public Key:', response.publicKey.toString());
       setWalletAddress(response.publicKey.toString());
-      // console.log('walle: ',walletAddress);
     }
   };
 
@@ -118,7 +123,7 @@ export default function PhoenixApp() {
 
 
   const renderNotConnectedContainer = () => (
-    <div className="container">
+    <div className="button-container">
       <button
         className="cta-button connect-wallet-button"
         onClick={connectWallet}
@@ -276,7 +281,7 @@ export default function PhoenixApp() {
             <div class="card-buttons">
               <button className="submit-button" onClick={() => setUnsignedVC("hello world")}>
                 Submit Record
-                {/* {shortenAddress(walletAddress)} */}
+                
               </button>
             </div>
           </div>
