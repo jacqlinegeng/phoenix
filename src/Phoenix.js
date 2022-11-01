@@ -1,7 +1,7 @@
 import "./Phoenix.scss";
 import React, { useEffect, useState } from "react";
-import { Connection, PublicKey, clusterAPIUrl } from "@solana/web3.js";
-// import { Program, Provider, web3 } from "@project-serum/anchor";
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
+// import { Provider } from "@project-serum/anchor";
 import toast, { Toaster } from "react-hot-toast";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,6 +19,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 //   preflightCommitment: "processed",
 // };
 
+
 export default function PhoenixApp() {
   // set date picker
   const [value, setValue] = React.useState(dayjs("2022-10-31T12:00:00"));
@@ -35,6 +36,8 @@ export default function PhoenixApp() {
   const sections = document.querySelectorAll(".card-section");
   const card = document.querySelector(".card");
 
+  
+  
   // const handleButtonClick = (e) => {
   //   const targetSection = e.target.getAttribute("data-section");
     
@@ -75,6 +78,24 @@ export default function PhoenixApp() {
       console.error(error);
     }
   };
+
+  // const getProvider = () => {
+  //   const connection = new Connection(network, opts.preflightCommitment);
+  //   const provider = new Provider(
+  //     connection,
+  //     window.solana,
+  //     opts.preflightCommitment
+  //   );
+  //   return provider;
+  // };
+
+  // const signMessage = async () => {
+  //   const provider = getProvider();
+  //   const message = "Please sign this message to verify the record";
+  //   const encodedMessage = new TextEncoder(). encode(message);
+  //   const signedMessage = await provider.signedMessage(encodedMessage, "utf8");
+  // }
+
 
 
   const shortenAddress = (address) => {
@@ -279,7 +300,7 @@ export default function PhoenixApp() {
             </div>
 
             <div class="card-buttons">
-              <button className="submit-button" onClick={() => setUnsignedVC("hello world")}>
+              <button className="submit-button" onClick=''>
                 Submit Record
                 
               </button>
